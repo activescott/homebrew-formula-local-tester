@@ -33,9 +33,11 @@ TAG=`basename -s .Dockerfile $DOCKERFILE`
 
 echo "using tag $TAG"
 
+TSTAMP=$(date +"%Y%m%d%H%M%s")
+
 PROGRESS_NO_TRUNC=1 docker build \
     --progress plain \
     --tag $TAG \
     -f $DOCKERFILE \
     --build-arg FORMULA_NAME=$FORMULA_NAME \
-    . 2>&1 | tee "$THISDIR/$THISSCRIPT.log"
+    . 2>&1 | tee "$THISDIR/$THISSCRIPT.$TSTAMP.log"
