@@ -2,7 +2,7 @@
 
 This is a local limited implementation that mimics some of the homebrew-core repo's .github/workflows/tests.yml workflow to test formulas.
 
-To use it run  the following (where onlykey-agent is the formula name to test)
+To use it run  the following (where `onlykey-agent` is the formula name to test):
 
 ```sh
 ./test-1-local.sh onlykey-agent
