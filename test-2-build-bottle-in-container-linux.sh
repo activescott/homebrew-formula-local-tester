@@ -47,10 +47,7 @@ echo "\n**********"
 echo "Container built."
 echo "Running brew commands in container..."
 
-#WORKS!
-#docker run -i -a stdin -a stdout -a stderr $TAG bash <<EOF
-#echo hello world
-#EOF
+START_SECONDS=`date +%s`
 
 docker run -i -a stdin -a stdout -a stderr $TAG bash <<EOF 2>&1 | tee -a $LOGFILE
 brew fetch --retry ${FORMULA_NAME} --build-bottle --force
@@ -58,3 +55,7 @@ HOMEBREW_NO_AUTO_UPDATE=1 brew install --only-dependencies --verbose --build-bot
 HOMEBREW_NO_AUTO_UPDATE=1 HOMEBREW_NO_INSTALL_CLEANUP=1 brew install --verbose --build-bottle ${FORMULA_NAME}
 HOMEBREW_NO_AUTO_UPDATE=1 brew test ${FORMULA_NAME}
 EOF
+
+END_SECONDS=`date +%s`
+
+echo "The bottle, install and test commands took $(( $END_SECONDS-$START_SECONDS )) seconds."
