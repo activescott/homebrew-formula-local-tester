@@ -34,10 +34,27 @@ TAG=`basename -s .Dockerfile $DOCKERFILE`
 echo "using tag $TAG"
 
 TSTAMP=$(date +"%Y-%m-%d-%H_%M_%S")
+LOGFILE="$THISDIR/$THISSCRIPT.$TSTAMP.log"
 
 PROGRESS_NO_TRUNC=1 docker build \
     --progress plain \
     --tag $TAG \
     -f $DOCKERFILE \
     --build-arg FORMULA_NAME=$FORMULA_NAME \
-    . 2>&1 | tee "$THISDIR/$THISSCRIPT.$TSTAMP.log"
+    . 2>&1 | tee $LOGFILE
+
+echo "\n**********"
+echo "Container built."
+echo "Running brew commands in container..."
+
+#WORKS!
+#docker run -i -a stdin -a stdout -a stderr $TAG bash <<EOF
+#echo hello world
+#EOF
+
+docker run -i -a stdin -a stdout -a stderr $TAG bash <<EOF 2>&1 | tee -a $LOGFILE
+brew fetch --retry ${FORMULA_NAME} --build-bottle --force
+HOMEBREW_NO_AUTO_UPDATE=1 brew install --only-dependencies --verbose --build-bottle ${FORMULA_NAME}
+HOMEBREW_NO_AUTO_UPDATE=1 HOMEBREW_NO_INSTALL_CLEANUP=1 brew install --verbose --build-bottle ${FORMULA_NAME}
+HOMEBREW_NO_AUTO_UPDATE=1 brew test ${FORMULA_NAME}
+EOF

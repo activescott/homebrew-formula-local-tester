@@ -12,5 +12,4 @@ DOCKERFILE=$THISDIR/homebrew-test-linux.Dockerfile
 TAG=`basename -s .Dockerfile $DOCKERFILE`
 
 docker run \
-  --mount source=homebrew-core,target=/mnt/homebrew \
   $TAG

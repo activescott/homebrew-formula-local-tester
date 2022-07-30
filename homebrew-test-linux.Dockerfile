@@ -12,12 +12,3 @@ RUN brew fetch --retry alsa-lib aom apr apr-util asciidoctor attr autoconf autoc
 # '/home/linuxbrew/.linuxbrew/Homebrew/Library/Taps/homebrew/homebrew-core' from `brew --repository homebrew/core`
 COPY staging/${FORMULA_NAME}.rb /home/linuxbrew/.linuxbrew/Homebrew/Library/Taps/homebrew/homebrew-core/Formula/
 RUN stat /home/linuxbrew/.linuxbrew/Homebrew/Library/Taps/homebrew/homebrew-core/Formula/${FORMULA_NAME}.rb
-
-RUN brew fetch --retry ${FORMULA_NAME} --build-bottle --force
-
-RUN HOMEBREW_NO_AUTO_UPDATE=1 brew install --only-dependencies --verbose --build-bottle ${FORMULA_NAME}
-
-RUN HOMEBREW_NO_AUTO_UPDATE=1 HOMEBREW_NO_INSTALL_CLEANUP=1 brew install --verbose --build-bottle ${FORMULA_NAME}
-
-RUN HOMEBREW_NO_AUTO_UPDATE=1 brew test ${FORMULA_NAME}
-
